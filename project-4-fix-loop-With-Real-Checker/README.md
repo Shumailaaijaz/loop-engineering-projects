@@ -123,10 +123,31 @@ point `PYTEST_PYTHON` at its `bin/python`.
 
 ## Limitations
 
-`gh` (GitHub CLI) is **not installed** in this environment, so no PR
-was actually created. Evidence below documents the exact command that
-would open it once authenticated; the run is honestly reported as
-blocked rather than faked.
+**Update:** `gh` (GitHub CLI) has since been installed and
+authenticated (`gh auth login`, device flow, HTTPS). `project4/good-fix`
+was pushed to `origin`, and the real PR was opened:
+
+- **PR #1** — https://github.com/Shumailaaijaz/loop-engineering-projects/pull/1
+- Base: `main` (repo default branch) · Head: `project4/good-fix`
+- Opened only after the reviewer re-confirmed `PASS` on the pushed branch.
+- `project4/bad-fix` was never pushed and has no PR.
+
+Note: this repo's local `main` was ahead of `origin/main` by two
+commits (the Project 4 baseline + evidence commits) at the time the PR
+was opened, and per the task's safety rules `main` itself was not
+pushed. Because of that, PR #1's diff is computed against the older
+`origin/main` and so includes the whole `project-4-fix-loop-With-Real-Checker/`
+addition, not just the isolated one-file fix — this is expected given
+what was and wasn't pushed, not a review or scope failure of
+`review_fix.py` itself (which correctly scoped `project4/good-fix`'s
+diff against local `main` to `app/` only — see
+`evidence/good-fix/02_diff.txt`).
+
+Below is preserved as a record of the original state, before `gh` was
+available: `gh` (GitHub CLI) was **not installed** in this
+environment, so no PR could be created. The exact command that would
+open it once authenticated was documented instead; the run was
+honestly reported as blocked rather than faked.
 
 ## Evidence
 
@@ -165,13 +186,11 @@ PASS
 ```
 (Oracle test passes on the candidate; oracle sanity-check confirms it correctly fails on `main`; diff scoped to `app/` only; full suite green.)
 
-**PR result:** `gh` (GitHub CLI) is not installed in this environment, so no PR was created. Exact command that would open it:
-```
-gh pr create --repo Shumailaaijaz/loop-engineering-projects --base main --head project4/good-fix \
-  --title "Fix: preserve order in remove_duplicates" \
-  --body "Fixes the remove_duplicates() order bug described in project-4-fix-loop-With-Real-Checker/BUG_REPORT.md. Reviewer verdict: PASS."
-```
-`PR blocked because GitHub authentication/permissions are unavailable.`
+**PR result:** Created. **PR #1** —
+https://github.com/Shumailaaijaz/loop-engineering-projects/pull/1
+(`project4/good-fix` → `main`, open, not merged). See the "Update" note
+under [Limitations](#limitations) for how `gh` was set up and why the
+PR diff is larger than this single-file fix.
 
 ### Bad Fix
 
