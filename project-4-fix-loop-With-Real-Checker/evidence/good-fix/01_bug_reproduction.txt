@@ -1,0 +1,4 @@
+=== Reproduction on baseline (main) — before fix ===
+$ cd app && python3 -c "from inventory import remove_duplicates; print(remove_duplicates([103, 42, 103, 7, 42, 500]))"
+[42, 7, 500, 103]
+Expected: [103, 42, 7, 500]  <-- order NOT preserved on baseline, confirming the bug.

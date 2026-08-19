@@ -53,7 +53,10 @@ def git(worktree, *args):
 
 
 def get_changed_files(worktree, base):
-    result = git(worktree, "diff", "--name-only", f"{base}...HEAD")
+    # --relative makes paths relative to `worktree` (the project subdir)
+    # rather than the repo root, so this also works when the project
+    # lives inside a larger monorepo checkout.
+    result = git(worktree, "diff", "--name-only", "--relative", f"{base}...HEAD")
     if result.returncode != 0:
         return None, result.stderr.strip()
     files = [f for f in result.stdout.splitlines() if f.strip()]
@@ -77,9 +80,11 @@ def check_oracle_detects_bug_on_baseline(worktree, base):
     This proves the oracle test is actually capable of detecting the
     reported bug, rather than trivially passing on anything.
     """
-    show = git(worktree, "show", f"{base}:app/inventory.py")
+    # The leading "./" makes the path resolve relative to `worktree`
+    # (the -C cwd) instead of the repo root.
+    show = git(worktree, "show", f"{base}:./app/inventory.py")
     if show.returncode != 0:
-        return False, f"could not read {base}:app/inventory.py ({show.stderr.strip()})"
+        return False, f"could not read {base}:./app/inventory.py ({show.stderr.strip()})"
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
@@ -93,8 +98,9 @@ def review(worktree, base):
     reasons = []
     worktree = Path(worktree).resolve()
 
-    if not (worktree / ".git").exists():
-        return False, [f"{worktree} is not a git worktree (.git not found)."]
+    is_worktree = git(worktree, "rev-parse", "--is-inside-work-tree")
+    if is_worktree.returncode != 0 or is_worktree.stdout.strip() != "true":
+        return False, [f"{worktree} is not inside a git worktree."]
 
     inventory_path = worktree / "app" / "inventory.py"
     if not inventory_path.exists():

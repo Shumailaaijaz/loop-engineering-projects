@@ -101,12 +101,25 @@ the script prints "PR gate: FAIL -> PR creation forbidden" and stops.
 
 ```bash
 cd project-4-fix-loop-With-Real-Checker
+
+# one-time setup: pytest needs to be importable by whichever python
+# runs review_fix.py. Either create a local .venv/ (auto-detected by
+# review_fix.py) or point PYTEST_PYTHON at any interpreter with pytest:
+python3 -m venv .venv && .venv/bin/pip install pytest
+# or: export PYTEST_PYTHON=/path/to/python-with-pytest
+
 ./scripts/demo_project4.sh
 ```
 
 Runs the reviewer against both `project4/good-fix` and
 `project4/bad-fix`, showing the PASS/PR-allowed path and the
 FAIL/PR-blocked path back to back.
+
+Note: this repo's checkout lives on a Windows-mounted drive under WSL
+(`/mnt/d`), where `python -m venv` + `pip install` can be extremely
+slow (many small file writes). If that happens, create the venv
+somewhere on the native Linux filesystem instead (e.g. `/tmp`) and
+point `PYTEST_PYTHON` at its `bin/python`.
 
 ## Limitations
 
@@ -117,4 +130,66 @@ blocked rather than faked.
 
 ## Evidence
 
-*(Filled in after the good-fix and bad-fix runs — see `evidence/good-fix/` and `evidence/bad-fix/` for full raw output.)*
+Full raw output for every step lives in `evidence/good-fix/`,
+`evidence/bad-fix/`, and `evidence/demo_run.txt` (a full run of
+`scripts/demo_project4.sh` showing both paths back to back). Summary
+below.
+
+### Good Fix
+
+**Bug reproduction (on `main`, before fix):**
+```
+$ cd app && python3 -c "from inventory import remove_duplicates; print(remove_duplicates([103, 42, 103, 7, 42, 500]))"
+[42, 7, 500, 103]
+Expected: [103, 42, 7, 500]
+```
+
+**Fix (`project4/good-fix`, diff vs `main`):**
+```diff
+-    return list(set(items))
++    seen = set()
++    result = []
++    for item in items:
++        if item not in seen:
++            seen.add(item)
++            result.append(item)
++    return result
+```
+Plus one added regression test, `test_remove_duplicates_preserves_first_seen_order`.
+
+**Tests (candidate branch):** `5 passed` (`app/test_inventory.py`, includes the new regression test).
+
+**Reviewer verdict:**
+```
+PASS
+```
+(Oracle test passes on the candidate; oracle sanity-check confirms it correctly fails on `main`; diff scoped to `app/` only; full suite green.)
+
+**PR result:** `gh` (GitHub CLI) is not installed in this environment, so no PR was created. Exact command that would open it:
+```
+gh pr create --repo Shumailaaijaz/loop-engineering-projects --base main --head project4/good-fix \
+  --title "Fix: preserve order in remove_duplicates" \
+  --body "Fixes the remove_duplicates() order bug described in project-4-fix-loop-With-Real-Checker/BUG_REPORT.md. Reviewer verdict: PASS."
+```
+`PR blocked because GitHub authentication/permissions are unavailable.`
+
+### Bad Fix
+
+**Deliberately incorrect change (`project4/bad-fix`, diff vs `main`):**
+```diff
+-    return list(set(items))
++    # Deduplicate deterministically instead of relying on set() iteration order.
++    return sorted(set(items))
+```
+Plus a weak, self-authored test (`test_remove_duplicates_is_deterministic`) that only checks the result is duplicate-free and repeatable — never that order is first-seen order. This is a realistic mistake: it "fixes" the visible symptom (nondeterminism) without meeting the actual acceptance criteria (order preservation), and the implementer's own tests all pass, which is exactly the trap the reviewer has to see through.
+
+**Reviewer verdict:**
+```
+FAIL
+Reason: Independent oracle regression test (reviewer/oracle_tests/test_remove_duplicates_bug.py) FAILED against the candidate implementation.
+  test_remove_duplicates_preserves_first_seen_order: assert [7, 42, 103, 500] == [103, 42, 7, 500]
+  test_remove_duplicates_preserves_order_with_no_duplicates: assert [1, 2, 3, 4, 5] == [5, 4, 3, 2, 1]
+```
+Rejected even though the implementer's own `app/` test suite passed 5/5 — the reviewer never trusted that suite as sufficient, per `reviewer/REVIEWER.md`. The checker was strict on the first attempt; no tightening was needed.
+
+**PR result:** No PR command was run or shown. `scripts/demo_project4.sh` prints `PR gate: FAIL -> PR creation forbidden.` and stops — the gate makes it structurally impossible to reach the `gh pr create` step on a `FAIL`.

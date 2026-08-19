@@ -1,0 +1,30 @@
+FAIL
+Reason: Independent oracle regression test (reviewer/oracle_tests/test_remove_duplicates_bug.py) FAILED against the candidate implementation. Output:
+    F.F                                                                      [100%]
+    =================================== FAILURES ===================================
+    ______________ test_remove_duplicates_preserves_first_seen_order _______________
+    
+        def test_remove_duplicates_preserves_first_seen_order():
+            cart_codes = [103, 42, 103, 7, 42, 500]
+    >       assert remove_duplicates(cart_codes) == [103, 42, 7, 500]
+    E       assert [7, 42, 103, 500] == [103, 42, 7, 500]
+    E         
+    E         At index 0 diff: 7 != 103
+    E         Use -v to get more diff
+    
+    reviewer/oracle_tests/test_remove_duplicates_bug.py:22: AssertionError
+    __________ test_remove_duplicates_preserves_order_with_no_duplicates ___________
+    
+        def test_remove_duplicates_preserves_order_with_no_duplicates():
+    >       assert remove_duplicates([5, 4, 3, 2, 1]) == [5, 4, 3, 2, 1]
+    E       assert [1, 2, 3, 4, 5] == [5, 4, 3, 2, 1]
+    E         
+    E         At index 0 diff: 1 != 5
+    E         Use -v to get more diff
+    
+    reviewer/oracle_tests/test_remove_duplicates_bug.py:30: AssertionError
+    =========================== short test summary info ============================
+    FAILED reviewer/oracle_tests/test_remove_duplicates_bug.py::test_remove_duplicates_preserves_first_seen_order
+    FAILED reviewer/oracle_tests/test_remove_duplicates_bug.py::test_remove_duplicates_preserves_order_with_no_duplicates
+    2 failed, 1 passed in 0.80s
+EXIT CODE: 1

@@ -1,0 +1,11 @@
+PR gate check: reviewer verdict = PASS -> PR creation allowed.
+
+gh CLI availability:
+gh: command not found
+
+PR blocked because GitHub authentication/permissions are unavailable.
+
+Exact command that would open the PR once authenticated:
+  gh pr create --repo Shumailaaijaz/loop-engineering-projects --base main --head project4/good-fix \
+    --title "Fix: preserve order in remove_duplicates" \
+    --body "Fixes the remove_duplicates() order bug described in project-4-fix-loop-With-Real-Checker/BUG_REPORT.md. Reviewer verdict: PASS (see evidence/good-fix/04_reviewer_verdict.txt)."

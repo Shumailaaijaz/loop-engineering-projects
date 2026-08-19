@@ -1,0 +1,3 @@
+PR gate check: reviewer verdict = FAIL -> PR creation forbidden.
+No 'gh pr create' command is run or shown for this branch.
+scripts/demo_project4.sh prints only: 'PR gate: FAIL -> PR creation forbidden.' and stops.

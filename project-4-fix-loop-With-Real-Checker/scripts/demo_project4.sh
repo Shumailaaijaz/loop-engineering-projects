@@ -30,6 +30,9 @@ cd "$PROJECT_ROOT"
 
 BASE_BRANCH="main"
 WORKTREE_DIR=".worktrees"
+# This project lives inside a monorepo, so `git worktree add` checks out
+# the whole repo; the project itself is one level down inside that checkout.
+PROJECT_SUBDIR="project-4-fix-loop-With-Real-Checker"
 
 section() {
     echo
@@ -49,7 +52,7 @@ ensure_worktree() {
     if [ ! -d "$path" ]; then
         git worktree add "$path" "$branch" >/dev/null
     fi
-    echo "$path"
+    echo "$path/$PROJECT_SUBDIR"
 }
 
 run_path() {

@@ -1,0 +1,8 @@
+=== Reproduction on candidate (project4/bad-fix) — 'fixed' but still wrong ===
+[7, 42, 103, 500]
+Expected (per BUG_REPORT.md acceptance criteria): [103, 42, 7, 500]
+Actual: sorted order, not first-seen order -- still violates the acceptance criteria.
+
+=== implementer's OWN app/ test suite on candidate (misleadingly all green) ===
+.....                                                                    [100%]
+5 passed in 1.75s

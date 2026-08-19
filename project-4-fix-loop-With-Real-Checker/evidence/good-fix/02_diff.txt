@@ -1,0 +1,29 @@
+=== git diff (project4/good-fix vs main) ===
+diff --git a/app/inventory.py b/app/inventory.py
+index f53b198..3091115 100644
+--- a/app/inventory.py
++++ b/app/inventory.py
+@@ -18,4 +18,10 @@ def remove_duplicates(items):
+     summary, and customers expect items to appear in the order they were
+     added to the cart.
+     """
+-    return list(set(items))
++    seen = set()
++    result = []
++    for item in items:
++        if item not in seen:
++            seen.add(item)
++            result.append(item)
++    return result
+diff --git a/app/test_inventory.py b/app/test_inventory.py
+index 273f9b8..ebacab2 100644
+--- a/app/test_inventory.py
++++ b/app/test_inventory.py
+@@ -16,3 +16,7 @@ def test_total_price_unknown_item_is_free():
+ 
+ def test_remove_duplicates_removes_all_dupes():
+     assert sorted(remove_duplicates([1, 1, 2, 3, 3, 3])) == [1, 2, 3]
++
++
++def test_remove_duplicates_preserves_first_seen_order():
++    assert remove_duplicates([103, 42, 103, 7, 42, 500]) == [103, 42, 7, 500]
