@@ -1,0 +1,35 @@
+{
+  "note": "Real API responses captured while configuring the Claude Code Routine and its GitHub pull_request webhook trigger via the RemoteTrigger tool (claude.ai /v1/code/triggers and /v1/code/webhook-triggers). Not fabricated.",
+  "routine_create_response": {
+    "id": "trig_01PiFmfdaYgN8JdpA33xYXLJ",
+    "name": "Project 6 - Doorbell Loop PR Reviewer",
+    "enabled": true,
+    "created_via": "http_api",
+    "created_at": "2026-08-19T19:07:58.671578Z",
+    "job_config": {
+      "ccr": {
+        "environment_id": "env_01GHkmyX1mfWGgMeSCJsH8SM",
+        "session_context": {
+          "model": "claude-sonnet-5",
+          "sources": [
+            {"git_repository": {"url": "https://github.com/Shumailaaijaz/loop-engineering-projects"}}
+          ],
+          "allowed_tools": ["Bash", "Read", "Grep", "Glob"]
+        }
+      }
+    },
+    "routine_url": "https://claude.ai/code/routines/trig_01PiFmfdaYgN8JdpA33xYXLJ"
+  },
+  "webhook_trigger_create_response": {
+    "trigger": {
+      "routine_trigger_id": "trig_01PiFmfdaYgN8JdpA33xYXLJ",
+      "trigger_id": "3bb345ea-e40b-46bc-8509-81b561c07043",
+      "hook_type": "app",
+      "source": "github",
+      "scope_id": "github.com/shumailaaijaz/loop-engineering-projects",
+      "events": ["pull_request.opened", "pull_request.synchronize"],
+      "created_at": "2026-08-19T19:23:37.838168Z"
+    }
+  },
+  "prerequisite_step": "The webhook trigger initially failed with reason 'github_app_not_installed' until the Claude GitHub App (https://github.com/apps/claude) was installed on Shumailaaijaz/loop-engineering-projects by the repo owner. This is a required, non-API, human-consent step documented at https://code.claude.com/docs/en/routines#add-a-github-trigger."
+}
