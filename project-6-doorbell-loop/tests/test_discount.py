@@ -19,9 +19,8 @@ def test_ten_percent_between_five_and_nine():
 
 
 def test_twenty_percent_at_upper_boundary_ten():
-    # quantity == 10 is still within the 10% tier; the 20% tier starts
-    # strictly above 10.
-    assert apply_tiered_discount(100.0, 10) == 90.0
+    # quantity == 10 must already receive the 20% tier.
+    assert apply_tiered_discount(100.0, 10) == 80.0
 
 
 def test_twenty_percent_above_ten():

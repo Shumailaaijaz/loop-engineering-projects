@@ -21,7 +21,7 @@ def apply_tiered_discount(total: float, quantity: int) -> float:
     if quantity < 0:
         raise ValueError("quantity must not be negative")
 
-    if quantity > 10:
+    if quantity >= 10:
         rate = 0.20
     elif quantity >= 5:
         rate = 0.10
