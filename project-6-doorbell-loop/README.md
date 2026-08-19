@@ -97,7 +97,13 @@ The full prompt is committed at [`routine/routine-prompt.md`](routine/routine-pr
 It instructs Claude to: identify the triggering PR via `gh pr list`, read
 `REVIEWER.md`, read the actual diff (never trust the PR description or the
 author's own tests), hand-trace the boundary values, run the real test suite,
-and post a real `gh pr review` (never a merge, never a bare "LGTM").
+and post a real `gh pr review` (never a merge, never a bare "LGTM"). In
+practice, each fired session also received a `<github-trigger-context>`
+block (event type, PR number, branch, head SHA) injected ahead of the saved
+prompt, and used built-in `mcp__github__*` tools for the PR read/diff/review
+steps rather than shelling out to `gh` — the *outcome* (an independent
+diff read + a real posted PR review) matches the prompt's requirements
+either way.
 
 ### A required manual step (documented limitation)
 
@@ -113,23 +119,39 @@ or simulated.
 
 ## The planted bug
 
-Branch: `project6/planted-bug`. See [`evidence/`](evidence/) for the PR and
-review capture, and the PR diff itself on GitHub for the exact change.
+PR: https://github.com/Shumailaaijaz/loop-engineering-projects/pull/2
+Branch: `project6/planted-bug` → `main`.
 
-## Evidence
+Commit `af9ca8e` changed `app/discount.py:24` from `if quantity >= 10:` to
+`if quantity > 10:` — an off-by-one that moves `quantity == 10` out of the
+20% tier and into the 10% tier, contradicting the still-unchanged docstring
+and `REVIEWER.md`. The same commit also rewrote the boundary test
+(`test_twenty_percent_at_upper_boundary_ten`) to assert the new, wrong value
+(`90.0` instead of `80.0`), so `pytest` still reported **9 passed, 0
+failed** — the bug is invisible to a reviewer that only runs the suite and
+trusts the PR author's own tests.
+
+## Evidence — the full timeline, both event heartbeats
+
+| # | Event | Timestamp (UTC) | Routine session | Result |
+|---|---|---|---|---|
+| 1 | PR #2 **opened** (`pull_request.opened`) | 2026-08-19T19:34:44Z | [`cse_01P2hNJfpsciBTWSCBrc6zNB`](https://claude.ai/code/session_01P2hNJfpsciBTWSCBrc6zNB) fired 19:34:47Z | Review posted 19:35:59Z — **REQUEST CHANGES**, off-by-one + test-tampering both identified |
+| 2 | Fix commit `fa3fbf0` pushed → `pull_request.**synchronize**` | 2026-08-19T19:38:01Z | [`cse_01VyacMTjWykT1Bu953DMdGZ`](https://claude.ai/code/session_01VyacMTjWykT1Bu953DMdGZ) fired 19:38:09Z | Review posted 19:39:46Z — **APPROVE**, independently re-verified boundary values, confirmed diff vs `main` is empty |
 
 | File | What it shows |
 |---|---|
 | `evidence/01-routine-trigger.json` | Real API responses: routine creation, GitHub App install requirement, webhook trigger creation |
-| `evidence/02-planted-bug-pr.*` | The planted-bug PR as opened, before any review existed |
-| `evidence/03-automatic-review.*` | The first review, posted without any manual review request |
-| `evidence/04-bug-detected.*` | The review comment/body identifying the planted bug, with file/line and fix |
-| `evidence/05-synchronize-event.*` | The follow-up commit + GitHub's `synchronize` event on the same PR |
-| `evidence/06-second-review.*` | The second automatic review, triggered purely by the `synchronize` event |
+| `evidence/02-planted-bug-pr.json` | The planted-bug PR as opened (`gh pr view`), `reviews: []` — captured before any review existed |
+| `evidence/03-automatic-review.json` | Raw `gh pr view --json reviews` after both reviews were posted |
+| `evidence/04-bug-detected.md` | Extracted excerpt of review 1: the boundary trace table and test-tampering finding |
+| `evidence/05-synchronize-event.json` | The two commits on the PR branch and `updatedAt`, proving the second push happened on the same PR |
+| `evidence/06-second-review.md` | Extracted excerpt of review 2, plus the full event-heartbeat timing table |
 
 All evidence is real — captured from the live GitHub PR and the live Routine
 run history (`RemoteTrigger` → `list_runs` / `get_run_log`), not fabricated
-or manually triggered.
+or manually triggered. The reviewer was **never asked** to review; both
+reviews above were produced solely by GitHub `pull_request` events firing
+the Routine.
 
 ## Safety
 
