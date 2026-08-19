@@ -1,0 +1,10 @@
+--- worktree setup (project5/candidate-3-20260819T135320Z-41064) ---
+Preparing worktree (new branch 'project5/candidate-3-20260819T135320Z-41064')
+HEAD is now at 7529370 Project 4: add PR creation screenshot evidence
+
+--- maker (claude -p --permission-mode acceptEdits, timeout=180s) ---
+Fixed `remove_duplicates()` in `app/inventory.py` to iterate and preserve first-seen order instead of `list(set(items))`, and added `test_remove_duplicates_preserves_first_seen_order` in `app/test_inventory.py` using the exact input/output from the bug report. Only files under `app/` were touched. Per instructions, I have not run the test suite or the reviewer — that's for the independent checker.
+(maker exit code: 0)
+
+--- diff vs main ---
+(committed)

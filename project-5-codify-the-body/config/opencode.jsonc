@@ -1,0 +1,24 @@
+{
+  // Scoped permission profile for the headless "maker" agents spawned by
+  // scripts/opencode_fix_loop.sh. Copied into each candidate's isolated
+  // worktree before it runs, so opencode picks it up as project config.
+  //
+  // Deliberately narrow instead of a blanket "skip all permissions" flag:
+  // makers may read the repo and edit files (that's the job), but cannot
+  // touch the shell, network, or spawn sub-tasks. If a maker goes off the
+  // rails, the blast radius is "bad edits in its own throwaway worktree",
+  // never the host or the network.
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "read": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    "edit": "allow",
+    "bash": "deny",
+    "webfetch": "deny",
+    "websearch": "deny",
+    "task": "deny",
+    "question": "deny",
+    "external_directory": "deny"
+  }
+}

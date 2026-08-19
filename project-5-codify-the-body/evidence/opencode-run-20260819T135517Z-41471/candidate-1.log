@@ -1,0 +1,14 @@
+--- worktree setup (project5/candidate-1-20260819T135517Z-41471) ---
+Preparing worktree (new branch 'project5/candidate-1-20260819T135517Z-41471')
+HEAD is now at 7529370 Project 4: add PR creation screenshot evidence
+
+--- maker (claude -p --permission-mode acceptEdits, timeout=180s) ---
+Fix applied to `app/inventory.py` (order-preserving dedup via a `seen` set + list build), and a new order-sensitive regression test added to `app/test_inventory.py` using the exact case from the bug report. Only files under `app/` were touched. Per instructions, I'm not running the test suite or declaring the fix correct — that's for the independent reviewer.
+(maker exit code: 0)
+
+--- committing candidate's working-tree changes ---
+(committed)
+--- diff vs main ---
+ project-4-fix-loop-With-Real-Checker/app/inventory.py      | 8 +++++++-
+ project-4-fix-loop-With-Real-Checker/app/test_inventory.py | 4 ++++
+ 2 files changed, 11 insertions(+), 1 deletion(-)

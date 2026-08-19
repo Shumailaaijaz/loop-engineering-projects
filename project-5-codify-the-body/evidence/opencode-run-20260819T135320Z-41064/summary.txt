@@ -1,0 +1,4 @@
+candidate      verdict worktree
+candidate-1    PASS   /home/shumailaaijaz/.cache/loop-engineering-p5-worktrees/20260819T135320Z-41064/candidate-1/project-4-fix-loop-With-Real-Checker
+candidate-2    PASS   /home/shumailaaijaz/.cache/loop-engineering-p5-worktrees/20260819T135320Z-41064/candidate-2/project-4-fix-loop-With-Real-Checker
+candidate-3    PASS   /home/shumailaaijaz/.cache/loop-engineering-p5-worktrees/20260819T135320Z-41064/candidate-3/project-4-fix-loop-With-Real-Checker

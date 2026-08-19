@@ -1,0 +1,11 @@
+--- worktree setup (project5/candidate-2-20260819T135320Z-41064) ---
+Preparing worktree (new branch 'project5/candidate-2-20260819T135320Z-41064')
+Updating files:  63% (28/44)Updating files:  65% (29/44)Updating files:  68% (30/44)Updating files:  70% (31/44)Updating files:  72% (32/44)Updating files:  75% (33/44)Updating files:  77% (34/44)Updating files:  79% (35/44)Updating files:  81% (36/44)Updating files:  84% (37/44)Updating files:  86% (38/44)Updating files:  88% (39/44)Updating files:  90% (40/44)Updating files:  93% (41/44)Updating files:  95% (42/44)Updating files:  97% (43/44)Updating files: 100% (44/44)Updating files: 100% (44/44), done.
+HEAD is now at 7529370 Project 4: add PR creation screenshot evidence
+
+--- maker (claude -p --permission-mode acceptEdits, timeout=180s) ---
+Fixed `remove_duplicates()` in `app/inventory.py` to preserve first-seen order using a seen-set + list append loop instead of `list(set(items))`, and added `test_remove_duplicates_preserves_first_seen_order` in `app/test_inventory.py` using the exact example from BUG_REPORT.md (order-sensitive, would fail on the original buggy implementation). Only files under `app/` were touched. Stopping here per procedure — an independent reviewer will grade this.
+(maker exit code: 0)
+
+--- diff vs main ---
+(committed)

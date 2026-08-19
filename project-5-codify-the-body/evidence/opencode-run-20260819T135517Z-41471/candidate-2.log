@@ -1,0 +1,14 @@
+--- worktree setup (project5/candidate-2-20260819T135517Z-41471) ---
+Preparing worktree (new branch 'project5/candidate-2-20260819T135517Z-41471')
+HEAD is now at 7529370 Project 4: add PR creation screenshot evidence
+
+--- maker (claude -p --permission-mode acceptEdits, timeout=180s) ---
+Fixed `remove_duplicates()` in `app/inventory.py` to preserve first-seen order using a seen-set + list-append loop instead of `list(set(items))`, and added an order-sensitive regression test in `app/test_inventory.py` using the bug report's exact example (`[103, 42, 103, 7, 42, 500]` → `[103, 42, 7, 500]`). Only files under `app/` were touched. Per procedure, I have not run the test suite or declared the fix correct — that's for the independent reviewer.
+(maker exit code: 0)
+
+--- committing candidate's working-tree changes ---
+(committed)
+--- diff vs main ---
+ project-4-fix-loop-With-Real-Checker/app/inventory.py      | 8 +++++++-
+ project-4-fix-loop-With-Real-Checker/app/test_inventory.py | 4 ++++
+ 2 files changed, 11 insertions(+), 1 deletion(-)

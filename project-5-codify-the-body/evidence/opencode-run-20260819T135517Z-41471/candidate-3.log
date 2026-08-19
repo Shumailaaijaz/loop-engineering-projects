@@ -1,0 +1,14 @@
+--- worktree setup (project5/candidate-3-20260819T135517Z-41471) ---
+Preparing worktree (new branch 'project5/candidate-3-20260819T135517Z-41471')
+HEAD is now at 7529370 Project 4: add PR creation screenshot evidence
+
+--- maker (claude -p --permission-mode acceptEdits, timeout=180s) ---
+Fixed `remove_duplicates()` in `app/inventory.py` to use an explicit seen-set + first-seen-order loop instead of `list(set(items))`, and added `test_remove_duplicates_preserves_first_seen_order` in `app/test_inventory.py` that checks exact order using the bug report's reproduction case. Only files under `app/` were touched. Per the skill's procedure, I'm stopping here without running the test suite or claiming correctness — that's for the independent reviewer.
+(maker exit code: 0)
+
+--- committing candidate's working-tree changes ---
+(committed)
+--- diff vs main ---
+ project-4-fix-loop-With-Real-Checker/app/inventory.py      | 8 +++++++-
+ project-4-fix-loop-With-Real-Checker/app/test_inventory.py | 4 ++++
+ 2 files changed, 11 insertions(+), 1 deletion(-)
