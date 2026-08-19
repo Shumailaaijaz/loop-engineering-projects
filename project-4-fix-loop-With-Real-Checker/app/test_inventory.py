@@ -16,3 +16,7 @@ def test_total_price_unknown_item_is_free():
 
 def test_remove_duplicates_removes_all_dupes():
     assert sorted(remove_duplicates([1, 1, 2, 3, 3, 3])) == [1, 2, 3]
+
+
+def test_remove_duplicates_preserves_first_seen_order():
+    assert remove_duplicates([103, 42, 103, 7, 42, 500]) == [103, 42, 7, 500]

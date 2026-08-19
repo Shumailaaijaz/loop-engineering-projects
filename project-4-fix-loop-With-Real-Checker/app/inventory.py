@@ -18,4 +18,10 @@ def remove_duplicates(items):
     summary, and customers expect items to appear in the order they were
     added to the cart.
     """
-    return list(set(items))
+    seen = set()
+    result = []
+    for item in items:
+        if item not in seen:
+            seen.add(item)
+            result.append(item)
+    return result
