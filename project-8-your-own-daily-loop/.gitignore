@@ -1,0 +1,10 @@
+.worktrees/
+__pycache__/
+*.pyc
+.pytest_cache/
+state/*.log
+state/*.jsonl
+state/spine.json
+state/spine.json.tmp
+state/STOP
+state/loop.lock
