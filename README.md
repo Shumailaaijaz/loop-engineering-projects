@@ -1,1 +1,11 @@
 # loop-engineering-projects
+
+## Projects
+
+- [project-1-watch-loop](project-1-watch-loop/README.md) — Watch Loop
+- [project-2-tests-pass](project-2-tests-pass/README.md) — Make the Test Pass, Then Stop
+- [project-3-morning-brief-with-memory](project-3-morning-brief-with-memory/README.md) — Morning Brief with Memory
+- [project-4-fix-loop-With-Real-Checker](project-4-fix-loop-With-Real-Checker/README.md) — Worktree + Skill + Maker-Checker
+- [project-5-codify-the-body](project-5-codify-the-body/README.md) — Codify the Body
+- [project-6-doorbell-loop](project-6-doorbell-loop/README.md) — The Doorbell Loop
+- [project-7-break-it-on-purpose](project-7-break-it-on-purpose/README.md) — Break It on Purpose
